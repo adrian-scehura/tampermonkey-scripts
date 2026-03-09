@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub PR Copy Title Link
 // @namespace    http://tampermonkey.net/
-// @version      1.2.8
+// @version      1.2.9
 // @description  Adds buttons to copy PR title as Markdown or rich text link
 // @match        https://github.com/*/*/pull/*
 // @updateURL    https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
@@ -28,8 +28,16 @@
 
   const getTitle = () => {
     const h1 = document.querySelector('[data-component="PH_Title"]');
+    const titleText = h1?.querySelector(".markdown-title")?.textContent;
+
+    if (titleText) {
+      return titleText.trim().replace(/\s+/g, " ");
+    }
+
     const titleNode = h1?.cloneNode(true);
-    titleNode?.querySelectorAll("button").forEach((button) => button.remove());
+    titleNode
+      ?.querySelectorAll('button, [popover], [aria-hidden="true"], .fgColor-muted')
+      .forEach((node) => node.remove());
 
     return (titleNode?.textContent || "")
       .trim()
