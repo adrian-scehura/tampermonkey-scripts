@@ -5,6 +5,7 @@
 // @description  Adds buttons to copy PR title as Markdown or rich text link
 // @match        https://github.com/*/*/pull/*
 // @updateURL    https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
+// @downloadURL  https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
 // @grant        GM_setClipboard
 // ==/UserScript==
 
