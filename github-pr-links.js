@@ -4,8 +4,8 @@
 // @version      1.3.1
 // @description  Adds a button to copy the PR title as a rich text link
 // @match        https://github.com/*/*/pull/*
-// @updateURL    https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
-// @downloadURL  https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
+// @updateURL    https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/refs/heads/main/github-pr-links.js
+// @downloadURL  https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/refs/heads/main/github-pr-links.js
 // @grant        GM_setClipboard
 // ==/UserScript==
 
