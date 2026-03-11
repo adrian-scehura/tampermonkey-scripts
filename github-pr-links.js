@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub PR Copy Title Link
 // @namespace    http://tampermonkey.net/
-// @version      1.3.0
+// @version      1.3.1
 // @description  Adds a button to copy the PR title as a rich text link
 // @match        https://github.com/*/*/pull/*
 // @updateURL    https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
