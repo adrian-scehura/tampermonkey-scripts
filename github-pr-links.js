@@ -2,7 +2,7 @@
 // @name         GitHub PR Copy Title Link
 // @namespace    http://tampermonkey.net/
 // @version      1.3.0
-// @description  Adds buttons to copy PR title as Markdown or rich text link
+// @description  Adds a button to copy the PR title as a rich text link
 // @match        https://github.com/*/*/pull/*
 // @updateURL    https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
 // @downloadURL  https://raw.githubusercontent.com/adrian-scehura/tampermonkey-scripts/main/github-pr-links.js
@@ -12,18 +12,12 @@
 (() => {
   "use strict";
 
-  const BTN_MD_ID = "tm-copy-pr-link-md-btn";
   const BTN_RICH_ID = "tm-copy-pr-link-rich-btn";
   const BTN_WRAP_ID = "tm-copy-pr-link-btn-wrap";
 
   const getPrUrl = () => {
     const match = location.pathname.match(/^\/[^/]+\/[^/]+\/pull\/\d+/);
     return location.origin + (match ? match[0] : location.pathname);
-  };
-
-  const getRepoName = () => {
-    const parts = location.pathname.split("/");
-    return decodeURIComponent(parts[2] || "").trim();
   };
 
   const getTitle = () => {
@@ -45,12 +39,6 @@
       .replace(/\s*(?:\(#\d+\)|#\d+)\s*$/, "");
   };
 
-  const getLinkText = () => {
-    const repo = getRepoName();
-    const title = getTitle();
-    return repo ? `[${repo}] ${title}` : title;
-  };
-
   const escapeHtml = (value) =>
     value
       .replaceAll("&", "&amp;")
@@ -59,25 +47,11 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
 
-  const escapeMarkdownLinkText = (value) =>
-    value
-      .replaceAll("\\", "\\\\")
-      .replaceAll("[", "\\[")
-      .replaceAll("]", "\\]");
-
   const setCopiedState = (button, originalText) => {
     button.textContent = "Copied!";
     setTimeout(() => {
       button.textContent = originalText;
     }, 2000);
-  };
-
-  const copyPlain = async (text) => {
-    if (typeof GM_setClipboard === "function") {
-      GM_setClipboard(text, "text");
-      return;
-    }
-    await navigator.clipboard.writeText(text);
   };
 
   const copyRich = async (plainText, htmlText) => {
@@ -119,25 +93,11 @@
     wrap.style.gap = "6px";
     wrap.style.flexShrink = "0";
 
-    const mdBtn = document.createElement("button");
-    mdBtn.id = BTN_MD_ID;
-    mdBtn.type = "button";
-    mdBtn.className = "btn btn-sm";
-    mdBtn.textContent = "Copy MD link";
-
     const richBtn = document.createElement("button");
     richBtn.id = BTN_RICH_ID;
     richBtn.type = "button";
     richBtn.className = "btn btn-sm";
-    richBtn.textContent = "Copy rich link";
-
-    mdBtn.onclick = async () => {
-      const url = getPrUrl();
-      const linkText = getLinkText();
-      const markdown = `[${escapeMarkdownLinkText(linkText)}](${url})`;
-      await copyPlain(markdown);
-      setCopiedState(mdBtn, "Copy MD link");
-    };
+    richBtn.textContent = "Copy link";
 
     richBtn.onclick = async () => {
       const url = getPrUrl();
@@ -145,10 +105,10 @@
       const plain = `${url} -> ${title}`;
       const html = `<a href="${escapeHtml(url)}">${escapeHtml(url)}</a> -&gt; ${escapeHtml(title)}`;
       await copyRich(plain, html);
-      setCopiedState(richBtn, "Copy rich link");
+      setCopiedState(richBtn, "Copy link");
     };
 
-    wrap.append(mdBtn, richBtn);
+    wrap.append(richBtn);
     parent.prepend(wrap);
   }
 
